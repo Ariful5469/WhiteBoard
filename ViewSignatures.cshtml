@@ -1,0 +1,12 @@
+﻿@model IEnumerable<SignaturePadApp.Models.Signature>
+
+<h2>Saved Signatures</h2>
+<div>
+    @foreach (var signature in Model)
+    {
+        <div>
+            <p>@signature.UserName (@signature.CreatedAt.ToShortDateString())</p>
+            <img src="data:image/png;base64,@Convert.ToBase64String(signature.ImageData)" alt="Signature" />
+        </div>
+    }
+</div>

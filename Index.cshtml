@@ -1,0 +1,49 @@
+﻿@model SignaturePadApp.Models.Signature
+
+<h2>White Board</h2>
+<div style="text-align: center;">
+    <canvas id="white-board" style="border:1px solid #000;"></canvas>
+    <div style="margin-top: 20px;">
+        <button id="clear">Clear</button>
+        <button id="save">Save</button>
+    </div>
+</div>
+
+@using (Html.BeginForm("SaveSignature", "Signature", FormMethod.Post, new { id = "signatureForm" }))
+{
+    @Html.Hidden("imageData")
+    <input type="text" name="userName" placeholder="Enter your name" required style="margin-top: 20px;" />
+    <input type="submit" style="display:none;" />
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<script>
+    var canvas = document.getElementById('white-board');
+
+    // Resize the canvas to fill the window
+    function resizeCanvas() {
+        var canvasContainer = canvas.parentElement;
+        canvas.width = window.innerWidth * 0.9;
+        canvas.height = window.innerHeight * 0.7;
+    }
+
+    resizeCanvas();
+    window.onresize = resizeCanvas;
+
+    var signaturePad = new SignaturePad(canvas);
+
+    $('#clear').click(function () {
+        signaturePad.clear();
+    });
+
+    $('#save').click(function () {
+        if (!signaturePad.isEmpty()) {
+            var dataUrl = signaturePad.toDataURL();
+            $('input[name="imageData"]').val(dataUrl);
+            $('#signatureForm').submit();
+        } else {
+            alert("Please provide a drawing first.");
+        }
+    });
+</script>
